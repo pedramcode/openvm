@@ -1,11 +1,13 @@
 CC = gcc
-CC_FLAGS = -Wall -Werror -std=c99 -O3
+CC_FLAGS = -Wall -Werror -std=c99 -O3 -L$(BINDIR)
 
 SRCDIR = src
 INCDIR = include
 LIBDIR = lib
 BLDDIR = build
 BINDIR = bin
+
+CC_LIB_FLAGS = -L$(BINDIR) -lassembler -I$(LIBDIR)/assembler/include
 
 TARGET = $(BINDIR)/vm.out
 
@@ -16,11 +18,11 @@ all: build_assembler $(TARGET)
 
 $(TARGET): $(OBJECTS)
 	@mkdir -p $(dir $@)
-	$(CC) $(CC_FLAGS) -o $@ $^
+	$(CC) $(CC_FLAGS) -o $@ $^ $(CC_LIB_FLAGS)
 
 $(BLDDIR)/%.o: $(SRCDIR)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CC_FLAGS) -I$(INCDIR) -c -o $@ $<
+	$(CC) $(CC_FLAGS) $(CC_LIB_FLAGS) -I$(INCDIR) -c -o $@ $<
 
 build_assembler:
 	@echo "building assember"
@@ -33,7 +35,7 @@ clean:
 	@find $(BLDDIR)/* -type f -not -name ".gitignore" -delete
 	@echo "project cleaned"
 
-run: $(TARGET)
-	@./$(TARGET) $(args)
+run: build_assembler $(TARGET)
+	@export LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:$(BINDIR) && ./$(TARGET) $(args)
 
-.PHONY: clean run build_assembler
+.PHONY: clean run

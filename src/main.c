@@ -2,7 +2,10 @@
 #include <openvm/file.h>
 #include <openvm/exception.h>
 
+#include <assembler/echo.h>
+
 int main(int argc, char **argv) {
+    echo("hello world!");
     vm_t *vm = vm_create();
 
     if(argc != 2) {
