@@ -1,5 +1,6 @@
 CC = gcc
 CC_FLAGS = -Wall -Werror -std=c99 -O3 -L$(BINDIR)
+MAKEFLAGS += --no-print-directory
 
 SRCDIR = src
 INCDIR = include
@@ -25,14 +26,13 @@ $(BLDDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) $(CC_FLAGS) $(CC_LIB_FLAGS) -I$(INCDIR) -c -o $@ $<
 
 build_assembler:
-	@echo "building assember"
-	@cd $(LIBDIR)/assembler && make
+	$(MAKE) -C $(LIBDIR)/assembler
 	@cp -r $(LIBDIR)/assembler/bin/* $(BINDIR)/
 
 clean:
-	@cd $(LIBDIR)/assembler && make clean
-	@find $(BINDIR)/* -type f -not -name ".gitignore" -delete
-	@find $(BLDDIR)/* -type f -not -name ".gitignore" -delete
+	@$(MAKE) clean -C $(LIBDIR)/assembler
+	@find $(BINDIR)/* -type f -not -name ".gitignore" -exec rm -rf {} +
+	@find $(BLDDIR)/* -type f -not -name ".gitignore" -exec rm -rf {} +
 	@echo "project cleaned"
 
 run: build_assembler $(TARGET)

@@ -22,8 +22,7 @@ $(BLDDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) $(CC_FLAGS) -I$(INCDIR) -c -o $@ $<
 
 clean:
-	@find $(BINDIR)/* -type f -not -name ".gitignore" -delete
-	@find $(BLDDIR)/* -type f -not -name ".gitignore" -delete
-	@echo "project cleaned"
+	@find $(BINDIR)/* -type f -not -name ".gitignore" -exec rm -rf {} +
+	@find $(BLDDIR)/* -type f -not -name ".gitignore" -exec rm -rf {} +
 
 .PHONY: clean 
