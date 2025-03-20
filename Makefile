@@ -38,4 +38,4 @@ clean:
 run: build_assembler $(TARGET)
 	@export LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:$(BINDIR) && ./$(TARGET) $(args)
 
-.PHONY: clean run
+.PHONY: clean run build_assembler

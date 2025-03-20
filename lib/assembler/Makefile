@@ -1,5 +1,6 @@
 CC = gcc
 CC_FLAGS = -Wall -Werror -std=c99 -fpic -O3
+MAKEFLAGS += --no-print-directory
 
 SRCDIR = src
 INCDIR = include
