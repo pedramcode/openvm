@@ -1,13 +1,12 @@
 CC = gcc
-CC_FLAGS = -Wall -Werror -std=c99 -O3
+CC_FLAGS = -Wall -Werror -std=c99 -fpic -O3
 
 SRCDIR = src
 INCDIR = include
-LIBDIR = libs
 BLDDIR = build
 BINDIR = bin
 
-TARGET = $(BINDIR)/vm.out
+TARGET = $(BINDIR)/libassembler.so
 
 SOURCES = $(shell find $(SRCDIR) -type f -name "*.c")
 OBJECTS = $(patsubst $(SRCDIR)/%.c, $(BLDDIR)/%.o, $(SOURCES))
@@ -16,7 +15,7 @@ all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
 	@mkdir -p $(dir $@)
-	$(CC) $(CC_FLAGS) -o $@ $^
+	$(CC) $(CC_FLAGS) -shared -o $@ $^
 
 $(BLDDIR)/%.o: $(SRCDIR)/%.c
 	@mkdir -p $(dir $@)
@@ -27,7 +26,4 @@ clean:
 	@find $(BLDDIR)/* -type f -not -name ".gitignore" -delete
 	@echo "project cleaned"
 
-run: $(TARGET)
-	@./$(TARGET) $(args)
-
-.PHONY: clean run
+.PHONY: clean 
