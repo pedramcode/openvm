@@ -22,8 +22,16 @@ $(BLDDIR)/%.o: $(SRCDIR)/%.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CC_FLAGS) -I$(INCDIR) -c -o $@ $<
 
+install:
+	@cp $(TARGET) /usr/lib/$(notdir $(TARGET))
+	@cp -r $(INCDIR)/* /usr/include
+
+uninstall:
+	@rm -rf /usr/lib/$(notdir $(TARGET))
+	@rm -rf /usr/include/assembler
+
 clean:
 	@find $(BINDIR)/* -type f -not -name ".gitignore" -exec rm -rf {} +
 	@find $(BLDDIR)/* -type f -not -name ".gitignore" -exec rm -rf {} +
 
-.PHONY: clean 
+.PHONY: clean install uninstall

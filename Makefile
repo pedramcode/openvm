@@ -35,7 +35,15 @@ clean:
 	@find $(BLDDIR)/* -type f -not -name ".gitignore" -exec rm -rf {} +
 	@echo "project cleaned"
 
+install:
+	@$(MAKE) install -C $(LIBDIR)/assembler
+	@cp $(TARGET) /usr/local/bin/$(notdir $(TARGET))
+
+uninstall:
+	@$(MAKE) uninstall -C $(LIBDIR)/assembler
+	@rm -rf /usr/local/bin/$(notdir $(TARGET))
+
 run: build_assembler $(TARGET)
 	@export LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:$(BINDIR) && ./$(TARGET) $(args)
 
-.PHONY: clean run build_assembler
+.PHONY: clean run install uninstall build_assembler
