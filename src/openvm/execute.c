@@ -274,6 +274,18 @@ void vm_execute(vm_t *vm){
                 goto next;
                 break;
             }
+            case OP_INC: {
+                uint16_t reg = (instr >> 6) & 0xf;
+                vm_register_set(vm, reg, vm_register_get(vm, reg) + 1);
+                goto next;
+                break;
+            }
+            case OP_DEC: {
+                uint16_t reg = (instr >> 6) & 0xf;
+                vm_register_set(vm, reg, vm_register_get(vm, reg) - 1);
+                goto next;
+                break;
+            }
             default: {
                 raise("invalid opcode");
             }

@@ -62,6 +62,10 @@ enum {
     OP_SHLI,
     /// @brief NOT [REG]
     OP_NOT,
+    /// @brief INC [REG]
+    OP_INC,
+    /// @brief DEC [REG]
+    OP_DEC,
     /// @brief END
     OP_END = 63,
 };

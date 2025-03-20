@@ -5,12 +5,12 @@
 
 void _int_run_io(vm_t *vm) {
     uint16_t params = vm_register_get(vm, REG_A);
-    uint16_t func_id = (params >> 11);
+    uint16_t func_id = (params >> 12);
 
     switch(func_id){
         // stdout print
         case 0x0001:{
-            unsigned char character = (params >> 3) & 0xff;
+            unsigned char character = (params >> 4) & 0xff;
             fprintf(stdout, "%c", character);
             break;
         }
