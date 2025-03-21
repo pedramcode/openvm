@@ -1,49 +1,30 @@
 CC = gcc
-CC_FLAGS = -Wall -Werror -std=c99 -O3 -L$(BINDIR)
-MAKEFLAGS += --no-print-directory
+CC_FLAGS = -Wall -Werror -std=c99 -O3
 
-SRCDIR = src
-INCDIR = include
-LIBDIR = lib
-BLDDIR = build
-BINDIR = bin
+SRCD = src
+INCD = include src
+BLDD = build
+BIND = bin
+TARGET = $(BIND)/openvm
 
-CC_LIB_FLAGS = -L$(BINDIR) -lassembler -I$(LIBDIR)/assembler/include
+SOURCES = $(shell find $(SRCD) -type f -name "*.c")
+OBJECTS = $(patsubst $(SRCD)/%.c,$(BLDD)/%.o, $(SOURCES))
 
-TARGET = $(BINDIR)/vm.out
-
-SOURCES = $(shell find $(SRCDIR) -type f -name "*.c")
-OBJECTS = $(patsubst $(SRCDIR)/%.c, $(BLDDIR)/%.o, $(SOURCES))
-
-all: build_assembler $(TARGET) 
+all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
 	@mkdir -p $(dir $@)
-	$(CC) $(CC_FLAGS) -o $@ $^ $(CC_LIB_FLAGS)
+	$(CC) $(CC_FLAGS) -o $@ $^
 
-$(BLDDIR)/%.o: $(SRCDIR)/%.c
+$(BLDD)/%.o: $(SRCD)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CC_FLAGS) $(CC_LIB_FLAGS) -I$(INCDIR) -c -o $@ $<
+	$(CC) $(CC_FLAGS) $(addprefix -I, $(INCD)) -c -o $@ $<
 
-build_assembler:
-	$(MAKE) -C $(LIBDIR)/assembler
-	@cp -r $(LIBDIR)/assembler/bin/* $(BINDIR)/
+run: $(TARGET)
+	@./$(TARGET)
 
 clean:
-	@$(MAKE) clean -C $(LIBDIR)/assembler
-	@find $(BINDIR)/* -type f -not -name ".gitignore" -exec rm -rf {} +
-	@find $(BLDDIR)/* -type f -not -name ".gitignore" -exec rm -rf {} +
-	@echo "project cleaned"
+	@rm -rf bin
+	@rm -rf build
 
-install:
-	@$(MAKE) install -C $(LIBDIR)/assembler
-	@cp $(TARGET) /usr/local/bin/$(notdir $(TARGET))
-
-uninstall:
-	@$(MAKE) uninstall -C $(LIBDIR)/assembler
-	@rm -rf /usr/local/bin/$(notdir $(TARGET))
-
-run: build_assembler $(TARGET)
-	@export LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:$(BINDIR) && ./$(TARGET) $(args)
-
-.PHONY: clean run install uninstall build_assembler
+.PHONY: clean run

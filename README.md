@@ -1,1 +1,1 @@
-# C language virtual machine and assembler
+# C language virtual vm and assembler
