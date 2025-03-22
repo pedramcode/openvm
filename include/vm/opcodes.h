@@ -31,6 +31,8 @@ enum {
     OP_POP,
     OP_CALL,
     OP_RET,
+    OP_INC,
+    OP_DEC,
     OP_END = 63,
 };
 

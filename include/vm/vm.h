@@ -9,6 +9,7 @@
 typedef struct {
     uint16_t memory[MEMORY_SIZE];
     uint16_t reg[_REG_COUNT];
+    uint16_t origin;
 } vm_t;
 
 vm_t *vm_new();

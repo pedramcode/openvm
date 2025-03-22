@@ -35,11 +35,6 @@ void vm_run(vm_t *vm){
                 }
                 r = op1 + op2;
                 vm_set_reg(vm, dest, r);
-
-                vm_set_flag(vm, FLAG_ZRO, r == 0);
-                vm_set_flag(vm, FLAG_CRY, r < op1);
-                vm_set_flag(vm, FLAG_NEG, (r & 0x8000) != 0);
-                vm_set_flag(vm, FLAG_OVF, (((op1 ^ op2) & 0x8000) == 0 && ((op1 ^ r) & 0x8000) != 0));
                 break;
             }
             case OP_SUB:{
@@ -59,11 +54,6 @@ void vm_run(vm_t *vm){
                 }
                 r = op1 - op2;
                 vm_set_reg(vm, dest, r);
-
-                vm_set_flag(vm, FLAG_ZRO, r == 0);
-                vm_set_flag(vm, FLAG_CRY, op1 < op2);
-                vm_set_flag(vm, FLAG_NEG, (r & 0x8000) != 0);
-                vm_set_flag(vm, FLAG_OVF, (((op1 ^ op2) & 0x8000) != 0 && ((op1 ^ r) & 0x8000) != 0));
                 break;
             }
             case OP_MOV:{
@@ -99,26 +89,6 @@ void vm_run(vm_t *vm){
                 break;
             }
             case OP_CMP:{
-                uint8_t mode = (bytecode >> 9) & 1;
-                uint16_t dest = (bytecode >> 5) & 0xf;
-                uint16_t src = (bytecode >> 1) & 0xf;
-
-                uint16_t op1 = vm_get_reg(vm, dest);
-                uint16_t op2 = 0;
-                uint16_t r = 0;
-
-                if(mode == MOD_REG) {
-                    op2 = vm_get_reg(vm, src);
-                } else {
-                    _inc_pc(vm);
-                    op2 = _get_current_bytecode(vm);
-                }
-                r = op1 - op2;
-
-                vm_set_flag(vm, FLAG_ZRO, r == 0);
-                vm_set_flag(vm, FLAG_CRY, op1 < op2);
-                vm_set_flag(vm, FLAG_NEG, (r & 0x8000) != 0);
-                vm_set_flag(vm, FLAG_OVF, (((op1 ^ op2) & 0x8000) != 0 && ((op1 ^ r) & 0x8000) != 0));
                 break;
             }
             case OP_INT:{
@@ -173,6 +143,16 @@ void vm_run(vm_t *vm){
                 break;
             }
             case OP_RET:{
+                break;
+            }
+            case OP_INC:{
+                uint16_t dest = (bytecode >> 6) & 0xf;
+                vm_set_reg(vm, dest, vm_get_reg(vm, dest) + 1);
+                break;
+            }
+            case OP_DEC:{
+                uint16_t dest = (bytecode >> 6) & 0xf;
+                vm_set_reg(vm, dest, vm_get_reg(vm, dest) - 1);
                 break;
             }
             case OP_END:{
