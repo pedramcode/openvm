@@ -35,10 +35,10 @@ enum {
 };
 
 enum {
-    FLAG_Z = 0, // if result is 0
-    FLAG_N = 2, // if result is negative
-    FLAG_C = 4, // if unsigned overflow occured (carry)
-    FLAG_O = 8, // if signed overflow occured
+    FLAG_ZRO = 1, // if result is 0
+    FLAG_NEG = 2, // if result is negative
+    FLAG_CRY = 4, // if unsigned overflow occured (carry)
+    FLAG_OVF = 8, // if signed overflow occured
 };
 
 #endif
