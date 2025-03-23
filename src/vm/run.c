@@ -303,9 +303,16 @@ void vm_run(vm_t *vm){
                 break;
             }
             case OP_CALL:{
+                vm_stack_push(vm, vm_get_reg(vm, REG_PC));
+                _inc_pc(vm);
+                uint16_t offset = _get_current_bytecode(vm);
+                vm_set_reg(vm, REG_PC, vm->origin + offset);
+                goto skip;
                 break;
             }
             case OP_RET:{
+                vm_set_reg(vm, REG_PC, vm_stack_pop(vm) + 1);
+                goto skip;
                 break;
             }
             case OP_INC:{
