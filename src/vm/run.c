@@ -325,10 +325,6 @@ void vm_run(vm_t *vm){
                 vm_set_reg(vm, dest, vm_get_reg(vm, dest) - 1);
                 break;
             }
-            case OP_END:{
-                running = false;
-                break;
-            }
             default: {
                 raise("invalid opcode");
                 break;

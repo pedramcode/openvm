@@ -33,7 +33,6 @@ enum {
     OP_RET,
     OP_INC,
     OP_DEC,
-    OP_END = 63,
 };
 
 enum {
