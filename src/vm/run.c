@@ -293,9 +293,13 @@ void vm_run(vm_t *vm){
                 break;
             }
             case OP_PUSH:{
+                uint8_t register_to_push = (bytecode >> 6) & 1;
+                vm_stack_push(vm, vm_get_reg(vm, register_to_push));
                 break;
             }
             case OP_POP:{
+                uint8_t register_to_pop = (bytecode >> 6) & 1;
+                vm_set_reg(vm, register_to_pop, vm_stack_pop(vm));
                 break;
             }
             case OP_CALL:{

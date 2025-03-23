@@ -1,6 +1,7 @@
 #ifndef OPENVM_VM_VM_H
 #define OPENVM_VM_VM_H
 #define MEMORY_SIZE (1 << 16)
+#define STACK_SIZE 256
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -22,5 +23,7 @@ uint16_t vm_load_mem(vm_t *vm, uint16_t address);
 void vm_run(vm_t *vm);
 void vm_set_flag(vm_t *vm, uint16_t flag, bool value);
 bool vm_get_flag(vm_t *vm, uint16_t flag);
+void vm_stack_push(vm_t *vm, uint16_t value);
+uint16_t vm_stack_pop(vm_t *vm);
 
 #endif
