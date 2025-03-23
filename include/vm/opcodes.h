@@ -33,6 +33,7 @@ enum {
     OP_RET,
     OP_INC,
     OP_DEC,
+    OP_MSTORE,
 };
 
 enum {

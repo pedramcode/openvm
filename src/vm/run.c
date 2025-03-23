@@ -325,6 +325,17 @@ void vm_run(vm_t *vm){
                 vm_set_reg(vm, dest, vm_get_reg(vm, dest) - 1);
                 break;
             }
+            case OP_MSTORE:{
+                uint16_t length = bytecode & 1023;
+                _inc_pc(vm);
+                uint16_t address = _get_current_bytecode(vm);
+                for(uint16_t i = 0 ; i < length ; i++){
+                    _inc_pc(vm);
+                    uint16_t value = _get_current_bytecode(vm);
+                    vm_store_mem(vm, address + i, value);
+                }
+                break;
+            }
             default: {
                 raise("invalid opcode");
                 break;
